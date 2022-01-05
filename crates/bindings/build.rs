@@ -1,14 +1,29 @@
 extern crate windows_bindgen;
 
 fn main() -> crate::Result<()> {
-    if let Ok(package_root) = webview2_nuget::install() {
-        webview2_nuget::update_windows(&package_root)?;
-        webview2_nuget::update_rustc_flags()?;
-        webview2_nuget::update_browser_version(&package_root)?;
-        webview2_nuget::update_callback_interfaces(&package_root)?;
+    println!("init");
+    match webview2_nuget::install() {
+        Ok(package_root) => {
+            println!("package root {:?}", package_root);
+            webview2_nuget::update_windows(&package_root)?;
+            println!("updated windows");
+            webview2_nuget::update_rustc_flags()?;
+            println!("updated rustc flags");
+            webview2_nuget::update_browser_version(&package_root)?;
+            println!("updated browser version");
+            webview2_nuget::update_callback_interfaces(&package_root)?;
+            println!("updated callback interfaces");
+        }
+        Err(e) => {
+            println!("error installing with nuget: {:?}", e);
+        }
     }
 
+    println!("updating bindings");
+
     webview2_bindgen::update_bindings()?;
+
+    println!("updated bindings");
 
     Ok(())
 }

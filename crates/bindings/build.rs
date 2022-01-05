@@ -134,7 +134,7 @@ mod webview2_nuget {
                     "-Version",
                     WEBVIEW2_VERSION,
                 ])
-                .output()?;
+                .status()?;
 
             if !check_nuget_dir(install_root)? {
                 return Err(super::Error::MissingPath(package_root));
